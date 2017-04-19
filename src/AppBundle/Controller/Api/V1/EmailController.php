@@ -113,4 +113,18 @@ class EmailController extends Controller
             'message' => $message,
         ], 404);
     }
+
+    /**
+     * @Route("/emails/{id}", name="api_v1_email_record_delete", requirements={"id": "\d+"})
+     * @Method("DELETE")
+     */
+    public function deleteEmailRecordAction(Request $request, Email $email)
+    {
+        $this->em->remove($email);
+        $this->em->flush();
+
+        return $this->json([
+            'status' => 'success',
+        ]);
+    }
 }
