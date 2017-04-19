@@ -5,22 +5,34 @@ namespace AppBundle\Controller\Api\V1;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class EmailController extends Controller
 {
+    private $em;
+
+    /**
+     * setContainer method used instead of constructor.
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->em = $this->getDoctrine()->getManager();
+    }
+
     /**
      * @Route("/emails", name="api_v1_emails")
      * @Method("GET")
      */
     public function getEmailsAction(Request $request)
     {
-        $email_repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Email');
+        $email_repository = $this->em->getRepository('AppBundle:Email');
         $items = $email_repository->findAll();
 
         return $this->json([
             'status' => 'success',
-            'results' => $items,
+            'results' => $this->get('serializer')->normalize($items),
         ]);
     }
 }
