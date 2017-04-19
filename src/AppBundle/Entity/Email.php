@@ -42,6 +42,7 @@ class Email
      * @var string
      *
      * @ORM\Column(name="provider", type="string", length=255, nullable=true)
+     * @Assert\Choice(choices = {"smtp", "rest"})
      */
     private $provider;
 
