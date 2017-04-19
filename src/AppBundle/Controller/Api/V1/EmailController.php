@@ -38,6 +38,26 @@ class EmailController extends Controller
     }
 
     /**
+     * @Route("/emails", name="api_v1_emails_new")
+     * @Method("POST")
+     */
+    public function newEmailAction(Request $request)
+    {
+        $email = new Email();
+        $this->em->persist($email);
+        $this->em->flush();
+
+        if ($id = $email->getId()) {
+            return $this->redirectToRoute('api_v1_email_record', [
+                'id' => $id,
+            ], 201);
+        }
+
+        // if somehow record has not been created
+        return $this->createNotFoundException();
+    }
+
+    /**
      * @Route("/emails/{id}", name="api_v1_email_record", requirements={"id": "\d+"})
      * @Method("GET")
      */
