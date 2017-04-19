@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Email;
 
 class EmailController extends Controller
 {
@@ -33,6 +34,18 @@ class EmailController extends Controller
         return $this->json([
             'status' => 'success',
             'results' => $this->get('serializer')->normalize($items),
+        ]);
+    }
+
+    /**
+     * @Route("/emails/{id}", name="api_v1_email_record", requirements={"id": "\d+"})
+     * @Method("GET")
+     */
+    public function getEmailRecordAction(Request $request, Email $email)
+    {
+        return $this->json([
+            'status' => 'success',
+            'results' => $this->get('serializer')->normalize($email),
         ]);
     }
 }
