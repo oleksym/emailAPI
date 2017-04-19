@@ -33,6 +33,7 @@ class EmailController extends Controller
 
         return $this->json([
             'status' => 'success',
+            'count' => count($items),
             'results' => $this->get('serializer')->normalize($items),
         ]);
     }
