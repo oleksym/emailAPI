@@ -69,4 +69,48 @@ class EmailController extends Controller
             'results' => $this->get('serializer')->normalize($email),
         ]);
     }
+
+    /**
+     * @Route("/emails/{id}", name="api_v1_email_record_modify", requirements={"id": "\d+"})
+     * @Method({"PUT", "PATCH"})
+     */
+    public function modifyEmailRecordAction(Request $request, Email $email)
+    {
+        $form = $this->createFormBuilder($email, ['csrf_protection' => false])
+            ->add('priority')
+            ->add('provider')
+            ->add('sender')
+            ->add('recipients')
+            ->add('subject')
+            ->add('body')
+            ->getForm();
+
+        $form->submit([
+            'priority' => $request->request->get('priority', $email->getPriority()),
+            'provider' => $request->request->get('provider', $email->getProvider()),
+            'sender' => $request->request->get('sender', $email->getSender()),
+            'recipients' => $request->request->get('recipients', $email->getRecipients()),
+            'subject' => $request->request->get('subject', $email->getSubject()),
+            'body' => $request->request->get('body', $email->getBody()),
+        ]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($email);
+            $this->em->flush();
+
+            return $this->json([
+                'status' => 'success',
+            ]);
+        }
+
+        $message = [];
+        foreach ($form->getErrors(true) as $error) {
+            $message[] = $error->getOrigin()->getName().': '.$error->getMessage();
+        }
+
+        return $this->json([
+            'status' => 'error',
+            'message' => $message,
+        ], 404);
+    }
 }

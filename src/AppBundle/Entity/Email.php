@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Email
@@ -33,6 +34,7 @@ class Email
      * @var int
      *
      * @ORM\Column(name="priority", type="smallint", nullable=true)
+     * @Assert\Range(min=0, max=10)
      */
     private $priority;
 
@@ -47,6 +49,7 @@ class Email
      * @var string
      *
      * @ORM\Column(name="sender", type="string", length=255, nullable=true)
+     * @Assert\Email()
      */
     private $sender;
 
@@ -54,6 +57,7 @@ class Email
      * @var array
      *
      * @ORM\Column(name="recipients", type="json_array", nullable=true)
+     * @Assert\Collection()
      */
     private $recipients;
 
@@ -91,7 +95,6 @@ class Email
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
     private $sentAt;
-
 
     /**
      * Get id
