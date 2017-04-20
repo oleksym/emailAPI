@@ -6,8 +6,8 @@ REST email API do generowanie i wysyłki wiadomości email.
 # Instalacja
 ```
 git clone git@github.com:oleksym/emailAPI.git
-composer install
 cd emailAPI
+composer install
 php bin/console doctrine:schema:create --env=prod
 ```
 
