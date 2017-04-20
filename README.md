@@ -75,8 +75,8 @@ Aby przetestować wysyłkę należy wprowadzić konfigurację mailera w pliku `a
 # Opis kodu
 - `src/AppBundle/Controller/Api/V1/EmailController.php` - logika API /emails. Adresy końcówek skonfigurowane są w adnotacjach a prefiks uzupełniony w `routing.yml`.
 - `src/AppBundle/Controller/Api/V1/AttachmentController.php` - logika API /emails/{id}/attachments
-- `src/AppBundle/Entity/Email.php` - obiekt reprezentujący rekord Email
-- `src/AppBundle/Entity/Attachment.php` - obiekt reprezentujący rekord Attachment
+- `src/AppBundle/Entity/Email.php` - klasa reprezentująca rekord Email
+- `src/AppBundle/Entity/Attachment.php` - klasa reprezentująca rekord Attachment
 - `src/AppBundle/Service/Mailer.php` - serwis obsługujący wysyłkę przez SMTP (przy użyciu SwiftMailera) oraz przez RESTowe API (TODO)
 - `src/AppBundle/Service/Serializer.php` - serwis zajmujący się serializacją i normalizacją odpowiedzi zwracanych przez API.
 - `src/AppBundle/Lib/RESTMailTransporter/RESTMailTransporter.php` - obsługa wysyłki przez API (TODO)
