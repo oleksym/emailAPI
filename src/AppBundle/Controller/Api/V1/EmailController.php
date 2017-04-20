@@ -134,13 +134,7 @@ class EmailController extends Controller
      */
     public function sendEmailsAction(Request $request)
     {
-        $email_repository = $this->em->getRepository('AppBundle:Email');
-        $query = $email_repository->createQueryBuilder('t0')
-            ->where('t0.status != :status OR t0.status IS NULL')
-            ->setParameter('status', Email::STATUS_SENT)
-            ->orderBy('t0.priority', 'DESC')
-            ->getQuery();
-        $items = $query->getResult();
+        $items = $this->em->getRepository('AppBundle:Email')->findEmailsToSend();
 
         $count_sent = 0;
         $reponse_message = [];
