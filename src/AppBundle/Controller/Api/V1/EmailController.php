@@ -127,4 +127,48 @@ class EmailController extends Controller
             'status' => 'success',
         ]);
     }
+
+    /**
+     * @Route("/emails/send", name="api_v1_emails_send")
+     * @Method("POST")
+     */
+    public function sendEmailsAction(Request $request)
+    {
+        $email_repository = $this->em->getRepository('AppBundle:Email');
+        $query = $email_repository->createQueryBuilder('t0')
+            ->where('t0.status != :status OR t0.status IS NULL')
+            ->setParameter('status', Email::STATUS_SENT)
+            ->orderBy('t0.priority', 'DESC')
+            ->getQuery();
+        $items = $query->getResult();
+
+        $count_sent = 0;
+        $reponse_message = [];
+        foreach ($items as $email) {
+            $message = \Swift_Message::newInstance()
+                ->setSubject($email->getSubject())
+                ->setFrom($email->getSender())
+                ->setTo($email->getRecipients())
+                ->setBody($email->getBody(), 'text/html');
+            try {
+                $this->get('app.mailer')->setMailerClient($email->getProvider())->send($message);
+                $email->setStatus(Email::STATUS_SENT);
+                $email->setSentAt(new \DateTime('now'));
+                $this->em->persist($email);
+                $this->em->flush();
+                ++$count_sent;
+            } catch (\Exception $e) {
+                $reponse_message[] = 'Email ID '.$email->getId().': '.$e->getMessage();
+            }
+        }
+
+        return $this->json([
+            'status' => 'success',
+            'count' => count($items),
+            'results' => [
+                'count_sent' => $count_sent,
+            ],
+            'message' => $reponse_message,
+        ]);
+    }
 }
