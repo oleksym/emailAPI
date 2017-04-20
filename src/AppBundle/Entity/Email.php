@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -98,6 +99,16 @@ class Email
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
     private $sentAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="email")
+     */
+    private $attachments;
+
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -359,5 +370,39 @@ class Email
         if ($this->getCreatedAt() == null) {
             $this->setCreatedAt(new \DateTime('now'));
         }
+    }
+
+    /**
+     * Add attachment
+     *
+     * @param \AppBundle\Entity\Attachment $attachment
+     *
+     * @return Email
+     */
+    public function addAttachment(\AppBundle\Entity\Attachment $attachment)
+    {
+        $this->attachments[] = $attachment;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachment
+     *
+     * @param \AppBundle\Entity\Attachment $attachment
+     */
+    public function removeAttachment(\AppBundle\Entity\Attachment $attachment)
+    {
+        $this->attachments->removeElement($attachment);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }
