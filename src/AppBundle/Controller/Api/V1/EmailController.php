@@ -34,7 +34,7 @@ class EmailController extends Controller
         return $this->json([
             'status' => 'success',
             'count' => count($items),
-            'results' => $this->get('serializer')->normalize($items),
+            'results' => $this->get('app.serializer')->normalize($items),
         ]);
     }
 
@@ -66,7 +66,7 @@ class EmailController extends Controller
     {
         return $this->json([
             'status' => 'success',
-            'results' => $this->get('serializer')->normalize($email),
+            'results' => $this->get('app.serializer')->normalize($email),
         ]);
     }
 
