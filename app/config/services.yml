@@ -7,3 +7,6 @@ services:
     app.mailer:
        class: AppBundle\Service\Mailer
        arguments: ['@logger', '@mailer']
+    app.serializer:
+       class: AppBundle\Service\Serializer
+       arguments: []
