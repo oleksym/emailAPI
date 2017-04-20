@@ -103,14 +103,14 @@ class EmailController extends Controller
             ]);
         }
 
-        $message = [];
+        $reponse_message = [];
         foreach ($form->getErrors(true) as $error) {
-            $message[] = $error->getOrigin()->getName().': '.$error->getMessage();
+            $reponse_message[] = $error->getOrigin()->getName().': '.$error->getMessage();
         }
 
         return $this->json([
             'status' => 'error',
-            'message' => $message,
+            'message' => $reponse_message,
         ], 404);
     }
 
